@@ -1,0 +1,12 @@
+---
+title: "Eytan Goldstein (working with Repo"
+author: "Eytan Goldstein"
+date: "2023-09-22"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## For my final project, I would like to compare voting data in Eastern Europe with GDP per capita. I want to study the correlation between low voting/ low interest in democracy in areas that have struggled to transition from socialism to a capitalistic market system since the fall of the Soviet Union and its satellite states in the 1990s. 
