@@ -12,9 +12,43 @@ My research question is how does a coup attempt that has been initiated by milit
 My unit of analysis are coups. Specifically, the Cline Center Coup D'Etat data set has 981 coups that occurred between 1945 and 2022. The explanatory variable is coup success. When the "realized" variable is equal to 1, that means the coup has occurred, in that a regime change happened. When the "realized" variable is equal to 0, that indicates that no regime change occurred, even though a coup was initiated. My outcome variable is whether or not the military initiated the coup. With this variable, the Cline Center experts are just looking at conventional militaries, and not security services, spy services, or other kinds of paramilitary formations. When the variable "military" = 1, then the military started the coup. When that variable is set to 0, it originated elsewhere. 
 
 If the average number of successful coups when the military was involved is significantly higher than the average number of successful coups under other conditions such as rebel groups or popular revolt, than I can conclude that there is a positive correlation between military involvement and the probability of a coup's success.
-
+```{r}
+## Load in Cline Center Coup Dataset
+library(readr)
+library(tidyverse)
+coup_data <- read_csv("Coup data 2.1.2.csv")
+```
+```{r}
+coup_data |>
+  ggplot(aes(x = year)) +
+geom_histogram(mapping = aes(y = after_stat(density)), binwidth=5) +
+facet_wrap(~ event_type) + labs(x = "Year", title = "Proportion of Military Involvement in 20th-21st Century Regime Change Events ")
+```
 
 ---
+
+
+```{r}
+## Load in Cline Center Coup Dataset
+library(readr)
+library(tidyverse)
+coup_data <- read_csv("Coup data 2.1.2.csv")
+glimpse(coup_data)
+```
+```{r}
+coup_data |>
+  ggplot(mapping = aes(x = year, y = realized)) + geom_col() + labs(x = "Year", y = "Number of Successful Coups", title = "Successful Coups Over Time")
+```
+```{r}
+coup_data |>
+  ggplot(aes(x = year)) +
+geom_histogram(mapping = aes(y = after_stat(density)), binwidth=5) +
+facet_wrap(~ event_type) + labs(x = "Year", title = "Proportion of Military Involvement in 20th-21st Century Regime Change Events ")
+```
+
+
+
+
 
 
 
