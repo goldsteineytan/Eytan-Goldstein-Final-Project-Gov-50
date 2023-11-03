@@ -25,10 +25,21 @@ geom_histogram(mapping = aes(y = after_stat(density)), binwidth=5) +
 facet_wrap(~ event_type) + labs(x = "Year", title = "Proportion of Military Involvement in 20th-21st Century Regime Change Events ")
 ```
 
+
+
+
 ---
 
 
+
+
+
+
+
 ```{r}
+
+
+
 ## Load in Cline Center Coup Dataset
 library(readr)
 library(tidyverse)
