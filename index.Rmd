@@ -29,7 +29,7 @@ glimpse(coup_data)
 coup_data |>
   ggplot(mapping = aes(x = year, y = realized)) + geom_col() + labs(x = "Year", y = "Number of Successful Coups", title = "Successful Coups Over Time")
 ```
-```{r}
+```{r, layout="l-body-outset"}
 coup_data |>
   ggplot(aes(x = year)) +
 geom_histogram(mapping = aes(y = after_stat(density)), binwidth=5) +
