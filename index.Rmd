@@ -1,76 +1,156 @@
 ---
 title: "Gov 50 Final Project"
 author: "Eytan Goldstein"
-description: "I am interested in exploring data related to comparing voting data in Eastern Europe with GDP per capita. I want to study the correlation between low voting/ low interest in democracy in areas that have struggled to transition from socialism to a capitalistic market system since the fall of the Soviet Union and its satellite states in the 1990s.In essence, I want to study how voting patters across Eastern European states is affected by their economic gains since the introduction of market based economic models. Obviously, this is a broad topic and I will need to find the requisite data sets to follow through with this. Nevertheless, it is a start."
+description: "This project aims to investigate whether military involvements makes a coup more likely to be successful in changing regime. The project contains a research question and main hypothesis to frame the proposal. It also has several plots and a regression that illustrate the research conducted. Finally, concluding thoughts discuss whether the hypothesis is borne out by the data."
 
 output:
   distill::distill_article:
     self_contained: false
 ---
-Project Proposal:
-My research question is how does a coup attempt that has been initiated by military actors affect the chances of the realization of the coup? My hypothesis is that coups that originate with military forces will have higher success rates than coups initiated by other means, such as by rebel forces or by popular revolt. This hypothesis is based on a conception of civil-military relations that dictates the confinement of the military focus to the use of force, while politicians make all decisions for the state. But, should a military be discontent with the actions of the head of state, their previous restrain on entrance into the political sphere could create a decisive shock event that would result in a regime change. Additionally, the military generally holds a monopoly or near monopoly on the deployment of violent means to achieve the objective. The use of violence to affect a successful change of ruler is another reason that a military led coup may see higher success rates than coups that originate with sectors of society that do not posess the ability to mobilize manpower and violence to achieve regime change. 
+
+
+
+## Introduction 
+My research question is how does a coup attempt that has been initiated by military actors affect the chances of the realization of the coup? My hypothesis is that coups that originate with military forces will have higher success rates than coups initiated by other means such as by rebel forces or by popular revolt. This hypothesis is based on a conception of civil-military relations that dictates the confinement of the military focus to the use of force, while politicians make all decisions for the state. Should a military be discontent with the actions of the head of state, their previous restraint on entrance into the political sphere could create a decisive shock event that would result in a regime change. Additionally, the military generally holds a monopoly or near monopoly on the deployment of violent means to achieve the objective. The use of violence to affect a successful change of ruler is another reason that a military led coup may see higher success rates than coups that originate with sectors of society that do not posses the ability to mobilize manpower and violence to achieve regime change. 
 
 My unit of analysis are coups. Specifically, the Cline Center Coup D'Etat data set has 981 coups that occurred between 1945 and 2022. The explanatory variable is coup success. When the "realized" variable is equal to 1, that means the coup has occurred, in that a regime change happened. When the "realized" variable is equal to 0, that indicates that no regime change occurred, even though a coup was initiated. My outcome variable is whether or not the military initiated the coup. With this variable, the Cline Center experts are just looking at conventional militaries, and not security services, spy services, or other kinds of paramilitary formations. When the variable "military" = 1, then the military started the coup. When that variable is set to 0, it originated elsewhere. 
 
-If the average number of successful coups when the military was involved is significantly higher than the average number of successful coups under other conditions such as rebel groups or popular revolt, than I can conclude that there is a positive correlation between military involvement and the probability of a coup's success.
+If the average number of successful coups when the military was involved is significantly higher than the average number of successful coups under other conditions such as rebel groups or popular revolt, than I can conclude that there is a positive correlation between military involvement and the probability of a coup's success. 
 
 
+## Data section
 ```{r}
-
 
 
 ## Load in Cline Center Coup Dataset
 library(readr)
 library(tidyverse)
+library(infer)
 coup_data <- read_csv("Coup data 2.1.2.csv")
-glimpse(coup_data)
-```
-```{r}
+
+
+##  Introductory Plot Visualizing Secondary Outcome of Interest
 coup_data |>
   ggplot(mapping = aes(x = year, y = realized)) + geom_col() + labs(x = "Year", y = "Number of Successful Coups", title = "Successful Coups Over Time")
 ```
+```{r}
+coup_data |>
+  ggplot(aes(x = year)) +
+geom_histogram(mapping = aes(y = after_stat(density)), binwidth=5) +
+facet_wrap(~ event_type) + labs(x = "Year", title = "Proportion of Military Involvement in 20th-21st Century Regime Change Events ")
+
+```
 
 ```{r}
+## Plot Visualizing Main Outcome of Interest
 library(tidyverse)
 library(infer)
-## Estimating the Difference in Means
-
-
+  ## Estimating the Difference in Means
 diff_in_means <- coup_data|>
   group_by(military)|>
   summarize(realized_mean = mean(realized))|>
   pivot_wider(names_from = military, 
-              values_from = realized_mean)
+              values_from = realized_mean)|>
+  mutate(ATE = `1` - `0`)|>
+  select(ATE)|>
+  knitr::kable(digits = 4)
+
 diff_in_means
 
-## Bootstrap for the Difference in Means
+  ## Bootstrap for the Difference in Means
 mil_boots <- coup_data |>
   rep_slice_sample(prop = 1, replace = TRUE, reps = 1000)|>
   group_by(replicate, military)|>
   summarize(realized_mean = mean(realized))|>
   pivot_wider(names_from = military, values_from = realized_mean)|>
   mutate(ATE = `1` - `0`)
-mil_boots
+  
 
 mil_boots |>
   ggplot(aes(x = ATE)) +
-  geom_histogram(aes(y = after_stat(density)), binwidth = 0.005, fill = "red") + labs(x = "Average Military Treatment Effect", y = "Density", title = "Effect of Military Actors on Coup Realization")
+  geom_histogram(aes(y = after_stat(density)), binwidth = 0.005, fill = "darkseagreen3") + labs(x = "Average Military Treatment Effect", y = "Density", title = "Effect of Military Actors on Coup Realization")
+
+mil_boots
 
 mil_ci_95 <- mil_boots |>
   select(replicate, ATE) |>
-  get_confidence_interval(level = 0.95, type = "percentile")
+  get_confidence_interval(level = 0.95, type = "percentile")|>
+  knitr::kable(col.names = c("Lower Confidence Interval", "Upper Confidence Interval"),digits = 4)
+  
 mil_ci_95
-
 ```
+The above is a difference in differences. In terms of the difference in means, the estimated average treatment effect is a small positive number, at just .0099. That means that essentially there is not much of a difference of a coup getting realized if the military is involved. What it does show is that there isn't a decrease either. That is, having military involvement does not necessarily mean that a coup is less likely to be realized. This is because there is a positive relationship between the two variables. Thus, while the confidence intervals will determine whether or not the null hypothesis can be rejected, the ATE allows us to examine the relationship in the first place. 
+
+
 This visualization demonstrates that military involvement does not decisively impact whether or not a coup d'etat is realized or not. This is because the 95 confidence intervals include zero. The Lower Confidence Interval is -0.05203567 and the Upper Confidence Interval is 0.06772111. The greater meaning of this is that military actors, contrary to expectation, do not actually increase the likelihood that a coup will be realized. This provides evidence against the hypothesis that trained and disciplined military cadres would be more prepared to follow through on a coup than civilian conspirators. 
 
+We used the 95 percent confidence interval so that we could see if we would get a meaningful result in 95 percent of repeated samples, and it is clear that we are discovering that we don't meet that threshold. So there is statistical uncertainty, meaning we can't reject the null hypothesis that there is statistical difference. An important thing to note for confidence intervals is also that for each particular calculated confidence interval,  truth is either in it or not, meaning we should try to mainly increase the reps to get a more accurate picture, rather than focus on whether or not one sample matches the truth. 
 
-```{r, layout="l-body-outset"}
-coup_data |>
-  ggplot(aes(x = year)) +
-geom_histogram(mapping = aes(y = after_stat(density)), binwidth=5) +
-facet_wrap(~ event_type) + labs(x = "Year", title = "Proportion of Military Involvement in 20th-21st Century Regime Change Events ")
+
+## Results Section 
+```{r}
+reg <- lm(realized ~ military, data = coup_data)
+reg
+
+reg |>
+  broom::tidy() |>
+  select(term, estimate) |>  
+  knitr::kable(digits = 2)
 ```
+What the coefficients essentially mean is that when the military is not involved, we would expect a realized coup to occur 44.35% of the time. For each addition of military, the occurrence of a realized coup is .98% percentage points higher. Thus, if the military is involved, we would expect to see a 44.35% + 0.95% likelihood of a coup occurring. So, we can say that the percentage of realized coup occurrence without military is 44.35%, and the percentage of realized coup occurrence with military involvement is 45.35%. It is obvious that military involvement in this case results in only a slight change in probability of the coup getting realized. This result is consistent with the result obtained through the bootstrap with difference in means. 
+
+Because the military variable in this data set is binary and the coup realized variable is also a binary variable, it is difficult to use a regression for these two variables. A more instructive use of the regression would be if one of the variables had a range of values. This is because there is no spectrum of outcomes, so any unit of analysis from the regression would be mainly hypothetical. Also, this regression is not controlling for other kinds of coups, nor the year in which they were conducted. Thus, further analysis is required to get a more accurate picture of the relationship.
+
+
+
+
+```{r}
+## Multiple Regression
+multreg <- lm(realized ~ military + year + rebel + foreign + conspiracy + palace + auto + resign + dissident, data = coup_data)
+
+summary(multreg)
+
+library(stargazer)
+stargazer(multreg, type = "text")
+
+```
+
+modelsummary::modelsummary(multreg,
+                           statistic = c("s.e. = {std.error}",
+                                         "p = {p.value}"),
+                           coef_map = 
+                           gof_map = c("nobs", "r.squared", "adj.r.squared"))
+
+Interestingly, when controlling for most of the other major kinds of coups possible, we see that that at the alpha = .05 or the 95% confidence interval we fail to reject the null hypothesis that there is no relationship between military involvement and a coup being realized because the p value is 0.073 which is larger than the alpha. Of course, it is such a small number that essentially there is only a slight negative relationship. In sum, it is clear that controlling for the other kinds of coups adds important conformation to the not-statistically significant relationship that I observed in the regression when I examined the confidence intervals for the difference in differences. 
+
+
+## Conclusion section 
+
+Indeed, we find that based on the regression and the bootstrap, there is not a statistically meaningful relationship between military involvement in the coup and a higher likelihood of a realized coup occurring. Indeed, based off of the bootstrap and the regression table, we can see that we are not able to reject the null hypothesis at the 95% level and thus we cannot say for sure whether there is a relationship, and anyhow the ATE calculated is extremely small. Thus, based on the analysis from the ATE, bootstrap and the regression, there is a weak relationship between military involvement and realized coup attempts. In simpler terms, there is weak to no support for my hypothesis. 
+
+Of course, the analysis is confirmed when looking at the multiple regression. There, the p-value of 0.07 is larger than the alpha of 0.05, meaning that we fail reject the null hypothesis, meaning that the relationship is not statistically significant. Thus, controlling for the variables confirms the earlier bootstrapping.
+
+In terms of limits to analysis, I think that the dataset has a very strict definition of what can be considered a coup, and also what constitutes military involvement. So, I do think that there is definitely some missing data from coups that may not have had the whole military involved, but several high ranking generals working with civilian counterparts in a conspiracy etc. I think that there is potentially a greater relationship if the parameters are loosened to a greater degree. In terms of a threat to inference in the experiment, I think there may be a kind of sampling bias inside the dataset where in a lot of these cases we may for national security reasons in many of these countries not know exactly who brought down the previous regime. What this means is that I suspect in many cases the conspirators or politicians hoping to stage a coup have a verbal agreement with the military that they won't do anything. In those cases, I feel as though the military is implicated in the coup attempt. There are also likely many confounding variables, one of which are explored in an additional analysis paragraph. 
+
+
+## Additional Analysis 
+
+I will also note that there are several potential confounders that could influence both whether the military is involved in the coup attempt and whether the coup is successful or not. Indeed, one potential confounder is the length of time that the incumbent regime has been in power. If they have been in power for a long time, there is probably a lower chance that a coup against them would be realized, because they have been able to consolidate control, and that time in power variable would have given the regime sufficient time to put their elites in place in the military hierarchy. Thus, that is one possible confounder. In terms of an alternative explanation for the results that I have gained, I think that much of the military involvement in coups might be the verbal contracts to not interfere with coup plotters' plans. Thus, I think if the dataset included those kinds of more nebulous and hard-to-measure varities of involvement, perhaps you would find a stronger correlation between military involvement and realized coups. Thus, because the military variable does not include security forces, ex-military, or informal agreements between other factors and military leaders, I think that the parameters could prevent the emergence of a positive relationship between the two variables. 
+
+## Attribution
+Peyton, Buddy, Joseph Bajjalieh, Dan Shalmon, Michael Martin, Jonathan Bonaguro, and Emilio Soto. 2023. Cline Center Coup d’État Project Dataset. Cline Center for Advanced Social Research. V.2.1.2. February 23. University of Illinois Urbana-Champaign. doi: 10.13012/B2IDB-9651987_V6
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
