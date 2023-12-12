@@ -18,7 +18,7 @@ My unit of analysis are coups. Specifically, the Cline Center Coup D'Etat data s
 If the average number of successful coups when the military was involved is significantly higher than the average number of successful coups under other conditions such as rebel groups or popular revolt, than I can conclude that there is a positive correlation between military involvement and the probability of a coup's success. 
 
 
-## Data section
+## Data Section
 ```{r}
 
 
@@ -34,6 +34,7 @@ coup_data |>
   ggplot(mapping = aes(x = year, y = realized)) + geom_col() + labs(x = "Year", y = "Number of Successful Coups", title = "Successful Coups Over Time")
 ```
 ```{r}
+# Creating graph from coup data that shoes the density of attempts of military involvement in different coup outcomes over time
 coup_data |>
   ggplot(aes(x = year)) +
 geom_histogram(mapping = aes(y = after_stat(density)), binwidth=5) +
@@ -65,13 +66,13 @@ mil_boots <- coup_data |>
   pivot_wider(names_from = military, values_from = realized_mean)|>
   mutate(ATE = `1` - `0`)
   
-
+#Graph displaying the density for the ATE
 mil_boots |>
   ggplot(aes(x = ATE)) +
   geom_histogram(aes(y = after_stat(density)), binwidth = 0.005, fill = "darkseagreen3") + labs(x = "Average Military Treatment Effect", y = "Density", title = "Effect of Military Actors on Coup Realization")
 
 mil_boots
-
+#Creating the confidence intervals
 mil_ci_95 <- mil_boots |>
   select(replicate, ATE) |>
   get_confidence_interval(level = 0.95, type = "percentile")|>
@@ -89,9 +90,11 @@ We used the 95 percent confidence interval so that we could see if we would get 
 
 ## Results Section 
 ```{r}
+# Creating the tibble for the regression
 reg <- lm(realized ~ military, data = coup_data)
 reg
 
+#Formatting the regression output
 reg |>
   broom::tidy() |>
   select(term, estimate) |>  
@@ -105,26 +108,22 @@ Because the military variable in this data set is binary and the coup realized v
 
 
 ```{r}
-## Multiple Regression
+## Multiple Regression 
 multreg <- lm(realized ~ military + year + rebel + foreign + conspiracy + palace + auto + resign + dissident, data = coup_data)
 
 summary(multreg)
 
+#Formatting the multiple regression so that I can see the measurements of the relationships and the p alues for all of the variables
 library(stargazer)
 stargazer(multreg, type = "text")
 
 ```
 
-modelsummary::modelsummary(multreg,
-                           statistic = c("s.e. = {std.error}",
-                                         "p = {p.value}"),
-                           coef_map = 
-                           gof_map = c("nobs", "r.squared", "adj.r.squared"))
 
-Interestingly, when controlling for most of the other major kinds of coups possible, we see that that at the alpha = .05 or the 95% confidence interval we fail to reject the null hypothesis that there is no relationship between military involvement and a coup being realized because the p value is 0.073 which is larger than the alpha. Of course, it is such a small number that essentially there is only a slight negative relationship. In sum, it is clear that controlling for the other kinds of coups adds important conformation to the not-statistically significant relationship that I observed in the regression when I examined the confidence intervals for the difference in differences. 
+The other variables besides military are different kinds of coups from the codebook. For example, "dissident" is whether coup attempt originated with regime dissidents. The coefficient for military is -0.057. That indicates a slightly negative relationship.Interestingly, when controlling for most of the other major kinds of coups possible, we see that that at the alpha = .05 or the 95% confidence interval we fail to reject the null hypothesis that there is no relationship between military involvement and a coup being realized because the p value is 0.073 which is larger than the alpha. Of course, it is such a small number that essentially there is only a slight negative relationship. In sum, it is clear that controlling for the other kinds of coups adds important conformation to the not-statistically significant relationship that I observed in the regression when I examined the confidence intervals for the difference in differences. 
 
 
-## Conclusion section 
+## Conclusion Section 
 
 Indeed, we find that based on the regression and the bootstrap, there is not a statistically meaningful relationship between military involvement in the coup and a higher likelihood of a realized coup occurring. Indeed, based off of the bootstrap and the regression table, we can see that we are not able to reject the null hypothesis at the 95% level and thus we cannot say for sure whether there is a relationship, and anyhow the ATE calculated is extremely small. Thus, based on the analysis from the ATE, bootstrap and the regression, there is a weak relationship between military involvement and realized coup attempts. In simpler terms, there is weak to no support for my hypothesis. 
 

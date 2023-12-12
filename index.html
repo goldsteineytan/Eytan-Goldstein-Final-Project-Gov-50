@@ -1595,18 +1595,18 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </div>
 <pre><code># A tibble: 1,000 × 4
 # Groups:   replicate [1,000]
-   replicate   `0`   `1`      ATE
-       &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
- 1         1 0.479 0.450 -0.0285 
- 2         2 0.472 0.443 -0.0294 
- 3         3 0.417 0.413 -0.00371
- 4         4 0.487 0.451 -0.0359 
- 5         5 0.470 0.438 -0.0327 
- 6         6 0.395 0.439  0.0439 
- 7         7 0.452 0.450 -0.00220
- 8         8 0.457 0.438 -0.0192 
- 9         9 0.432 0.454  0.0218 
-10        10 0.414 0.391 -0.0230 
+   replicate   `0`   `1`     ATE
+       &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+ 1         1 0.426 0.487  0.0606
+ 2         2 0.479 0.456 -0.0230
+ 3         3 0.421 0.459  0.0387
+ 4         4 0.482 0.460 -0.0216
+ 5         5 0.470 0.448 -0.0222
+ 6         6 0.470 0.458 -0.0115
+ 7         7 0.460 0.421 -0.0391
+ 8         8 0.409 0.454  0.0451
+ 9         9 0.451 0.436 -0.0142
+10        10 0.495 0.451 -0.0437
 # ℹ 990 more rows</code></pre>
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>mil_ci_95</span> <span class='op'>&lt;-</span> <span class='va'>mil_boots</span> <span class='op'>|&gt;</span></span>
@@ -1625,13 +1625,13 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: right;">-0.0554</td>
-<td style="text-align: right;">0.0711</td>
+<td style="text-align: right;">-0.0526</td>
+<td style="text-align: right;">0.0765</td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>In terms of the difference in means, the estimated average treatment effect is a small positive number, at just .0099. That means that essentially there is not much of a difference of a coup getting realized if the military is involved. What it does show is that there isn’t a decrease either. That is, having military involvement does not necessarily mean that a coup is less likely to be realized. This is because there is a positive relationship between the two variables. Thus, while the confidence intervals will determine whether or not the null hypothesis can be rejected, the ATE allows us to examine the relationship in the first place.</p>
+<p>The above is a difference in differences. In terms of the difference in means, the estimated average treatment effect is a small positive number, at just .0099. That means that essentially there is not much of a difference of a coup getting realized if the military is involved. What it does show is that there isn’t a decrease either. That is, having military involvement does not necessarily mean that a coup is less likely to be realized. This is because there is a positive relationship between the two variables. Thus, while the confidence intervals will determine whether or not the null hypothesis can be rejected, the ATE allows us to examine the relationship in the first place.</p>
 <p>This visualization demonstrates that military involvement does not decisively impact whether or not a coup d’etat is realized or not. This is because the 95 confidence intervals include zero. The Lower Confidence Interval is -0.05203567 and the Upper Confidence Interval is 0.06772111. The greater meaning of this is that military actors, contrary to expectation, do not actually increase the likelihood that a coup will be realized. This provides evidence against the hypothesis that trained and disciplined military cadres would be more prepared to follow through on a coup than civilian conspirators.</p>
 <p>We used the 95 percent confidence interval so that we could see if we would get a meaningful result in 95 percent of repeated samples, and it is clear that we are discovering that we don’t meet that threshold. So there is statistical uncertainty, meaning we can’t reject the null hypothesis that there is statistical difference. An important thing to note for confidence intervals is also that for each particular calculated confidence interval, truth is either in it or not, meaning we should try to mainly increase the reps to get a more accurate picture, rather than focus on whether or not one sample matches the truth.</p>
 <h2 id="results-section">Results Section</h2>
@@ -1762,10 +1762,10 @@ statistic = c(“s.e. = {std.error}”,
 “p = {p.value}”),
 coef_map =
 gof_map = c(“nobs”, “r.squared”, “adj.r.squared”))</p>
-<p>Interestingly, when controlling for most of the other major kinds of coups possible, we see that that at the alpha = .1 or the 90% confidence interval we can reject the null hypothesis that there is no relationship between military involvement and a coup being realized because the p value is 0.073 which is less than the alpha. But, we can’t actually take the hypothesis, which was that there is a positive relationship, because here we are observing that there is a negative hypothesis. Of course, it is such a small number that essentially there is only a slight negative relationship. In sum, it is clear that controlling for the other kinds of coups adds important context to the relationship that I observed in the regression before as well as the positive relationship I observed in the Average Treatment Effect.</p>
+<p>Interestingly, when controlling for most of the other major kinds of coups possible, we see that that at the alpha = .05 or the 95% confidence interval we fail to reject the null hypothesis that there is no relationship between military involvement and a coup being realized because the p value is 0.073 which is larger than the alpha. Of course, it is such a small number that essentially there is only a slight negative relationship. In sum, it is clear that controlling for the other kinds of coups adds important conformation to the not-statistically significant relationship that I observed in the regression when I examined the confidence intervals for the difference in differences.</p>
 <h2 id="conclusion-section">Conclusion section</h2>
 <p>Indeed, we find that based on the regression and the bootstrap, there is not a statistically meaningful relationship between military involvement in the coup and a higher likelihood of a realized coup occurring. Indeed, based off of the bootstrap and the regression table, we can see that we are not able to reject the null hypothesis at the 95% level and thus we cannot say for sure whether there is a relationship, and anyhow the ATE calculated is extremely small. Thus, based on the analysis from the ATE, bootstrap and the regression, there is a weak relationship between military involvement and realized coup attempts. In simpler terms, there is weak to no support for my hypothesis.</p>
-<p>Of course, the analysis shifts when looking at the multiple regression. There, the p-value is small enough to reject the null at the 90 percent confidence intervals, but the relationship discovered is negative, meaning that my hypothesis is not supported in any case. Nevertheless, this outcome demonstrates the importance of controls on experiment data. I would not have expected there would be a (very small) negative relationship between the two variables.</p>
+<p>Of course, the analysis is confirmed when looking at the multiple regression. There, the p-value of 0.07 is larger than the alpha of 0.05, meaning that we fail reject the null hypothesis, meaning that the relationship is not statistically significant. Thus, controlling for the variables confirms the earlier bootstrapping.</p>
 <p>In terms of limits to analysis, I think that the dataset has a very strict definition of what can be considered a coup, and also what constitutes military involvement. So, I do think that there is definitely some missing data from coups that may not have had the whole military involved, but several high ranking generals working with civilian counterparts in a conspiracy etc. I think that there is potentially a greater relationship if the parameters are loosened to a greater degree. In terms of a threat to inference in the experiment, I think there may be a kind of sampling bias inside the dataset where in a lot of these cases we may for national security reasons in many of these countries not know exactly who brought down the previous regime. What this means is that I suspect in many cases the conspirators or politicians hoping to stage a coup have a verbal agreement with the military that they won’t do anything. In those cases, I feel as though the military is implicated in the coup attempt. There are also likely many confounding variables, one of which are explored in an additional analysis paragraph.</p>
 <h2 id="additional-analysis">Additional Analysis</h2>
 <p>I will also note that there are several potential confounders that could influence both whether the military is involved in the coup attempt and whether the coup is successful or not. Indeed, one potential confounder is the length of time that the incumbent regime has been in power. If they have been in power for a long time, there is probably a lower chance that a coup against them would be realized, because they have been able to consolidate control, and that time in power variable would have given the regime sufficient time to put their elites in place in the military hierarchy. Thus, that is one possible confounder. In terms of an alternative explanation for the results that I have gained, I think that much of the military involvement in coups might be the verbal contracts to not interfere with coup plotters’ plans. Thus, I think if the dataset included those kinds of more nebulous and hard-to-measure varities of involvement, perhaps you would find a stronger correlation between military involvement and realized coups. Thus, because the military variable does not include security forces, ex-military, or informal agreements between other factors and military leaders, I think that the parameters could prevent the emergence of a positive relationship between the two variables.</p>
