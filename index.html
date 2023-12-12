@@ -1521,7 +1521,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <p>My research question is how does a coup attempt that has been initiated by military actors affect the chances of the realization of the coup? My hypothesis is that coups that originate with military forces will have higher success rates than coups initiated by other means such as by rebel forces or by popular revolt. This hypothesis is based on a conception of civil-military relations that dictates the confinement of the military focus to the use of force, while politicians make all decisions for the state. Should a military be discontent with the actions of the head of state, their previous restraint on entrance into the political sphere could create a decisive shock event that would result in a regime change. Additionally, the military generally holds a monopoly or near monopoly on the deployment of violent means to achieve the objective. The use of violence to affect a successful change of ruler is another reason that a military led coup may see higher success rates than coups that originate with sectors of society that do not posses the ability to mobilize manpower and violence to achieve regime change.</p>
 <p>My unit of analysis are coups. Specifically, the Cline Center Coup D’Etat data set has 981 coups that occurred between 1945 and 2022. The explanatory variable is coup success. When the “realized” variable is equal to 1, that means the coup has occurred, in that a regime change happened. When the “realized” variable is equal to 0, that indicates that no regime change occurred, even though a coup was initiated. My outcome variable is whether or not the military initiated the coup. With this variable, the Cline Center experts are just looking at conventional militaries, and not security services, spy services, or other kinds of paramilitary formations. When the variable “military” = 1, then the military started the coup. When that variable is set to 0, it originated elsewhere.</p>
 <p>If the average number of successful coups when the military was involved is significantly higher than the average number of successful coups under other conditions such as rebel groups or popular revolt, than I can conclude that there is a positive correlation between military involvement and the probability of a coup’s success.</p>
-<h2 id="data-section">Data section</h2>
+<h2 id="data-section">Data Section</h2>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'>## Load in Cline Center Coup Dataset</span></span>
@@ -1539,7 +1539,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>coup_data</span> <span class='op'>|&gt;</span></span>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># Creating graph from coup data that shoes the density of attempts of military involvement in different coup outcomes over time</span></span>
+<span><span class='va'>coup_data</span> <span class='op'>|&gt;</span></span>
 <span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>year</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
 <span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='op'>(</span>mapping <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>y <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes_eval.html'>after_stat</a></span><span class='op'>(</span><span class='va'>density</span><span class='op'>)</span><span class='op'>)</span>, binwidth<span class='op'>=</span><span class='fl'>5</span><span class='op'>)</span> <span class='op'>+</span></span>
 <span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/facet_wrap.html'>facet_wrap</a></span><span class='op'>(</span><span class='op'>~</span> <span class='va'>event_type</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>"Year"</span>, title <span class='op'>=</span> <span class='st'>"Proportion of Military Involvement in 20th-21st Century Regime Change Events "</span><span class='op'>)</span></span></code></pre>
@@ -1584,7 +1585,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <span>  <span class='fu'><a href='https://tidyr.tidyverse.org/reference/pivot_wider.html'>pivot_wider</a></span><span class='op'>(</span>names_from <span class='op'>=</span> <span class='va'>military</span>, values_from <span class='op'>=</span> <span class='va'>realized_mean</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
 <span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>ATE <span class='op'>=</span> <span class='va'>`1`</span> <span class='op'>-</span> <span class='va'>`0`</span><span class='op'>)</span></span>
 <span>  </span>
-<span></span>
+<span><span class='co'>#Graph displaying the density for the ATE</span></span>
 <span><span class='va'>mil_boots</span> <span class='op'>|&gt;</span></span>
 <span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>ATE</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
 <span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>y <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes_eval.html'>after_stat</a></span><span class='op'>(</span><span class='va'>density</span><span class='op'>)</span><span class='op'>)</span>, binwidth <span class='op'>=</span> <span class='fl'>0.005</span>, fill <span class='op'>=</span> <span class='st'>"darkseagreen3"</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>"Average Military Treatment Effect"</span>, y <span class='op'>=</span> <span class='st'>"Density"</span>, title <span class='op'>=</span> <span class='st'>"Effect of Military Actors on Coup Realization"</span><span class='op'>)</span></span></code></pre>
@@ -1595,21 +1596,22 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </div>
 <pre><code># A tibble: 1,000 × 4
 # Groups:   replicate [1,000]
-   replicate   `0`   `1`     ATE
-       &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
- 1         1 0.426 0.487  0.0606
- 2         2 0.479 0.456 -0.0230
- 3         3 0.421 0.459  0.0387
- 4         4 0.482 0.460 -0.0216
- 5         5 0.470 0.448 -0.0222
- 6         6 0.470 0.458 -0.0115
- 7         7 0.460 0.421 -0.0391
- 8         8 0.409 0.454  0.0451
- 9         9 0.451 0.436 -0.0142
-10        10 0.495 0.451 -0.0437
+   replicate   `0`   `1`       ATE
+       &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
+ 1         1 0.427 0.461  0.0343  
+ 2         2 0.455 0.463  0.00747 
+ 3         3 0.444 0.485  0.0409  
+ 4         4 0.424 0.491  0.0667  
+ 5         5 0.481 0.481  0.000861
+ 6         6 0.445 0.486  0.0411  
+ 7         7 0.434 0.414 -0.0206  
+ 8         8 0.417 0.471  0.0532  
+ 9         9 0.462 0.456 -0.00547 
+10        10 0.464 0.473  0.00904 
 # ℹ 990 more rows</code></pre>
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>mil_ci_95</span> <span class='op'>&lt;-</span> <span class='va'>mil_boots</span> <span class='op'>|&gt;</span></span>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'>#Creating the confidence intervals</span></span>
+<span><span class='va'>mil_ci_95</span> <span class='op'>&lt;-</span> <span class='va'>mil_boots</span> <span class='op'>|&gt;</span></span>
 <span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>replicate</span>, <span class='va'>ATE</span><span class='op'>)</span> <span class='op'>|&gt;</span></span>
 <span>  <span class='fu'><a href='https://infer.tidymodels.org/reference/get_confidence_interval.html'>get_confidence_interval</a></span><span class='op'>(</span>level <span class='op'>=</span> <span class='fl'>0.95</span>, type <span class='op'>=</span> <span class='st'>"percentile"</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
 <span>  <span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span>col.names <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Lower Confidence Interval"</span>, <span class='st'>"Upper Confidence Interval"</span><span class='op'>)</span>,digits <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span></span>
@@ -1625,8 +1627,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: right;">-0.0526</td>
-<td style="text-align: right;">0.0765</td>
+<td style="text-align: right;">-0.0559</td>
+<td style="text-align: right;">0.073</td>
 </tr>
 </tbody>
 </table>
@@ -1637,7 +1639,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <h2 id="results-section">Results Section</h2>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>reg</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>realized</span> <span class='op'>~</span> <span class='va'>military</span>, data <span class='op'>=</span> <span class='va'>coup_data</span><span class='op'>)</span></span>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># Creating the tibble for the regression</span></span>
+<span><span class='va'>reg</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>realized</span> <span class='op'>~</span> <span class='va'>military</span>, data <span class='op'>=</span> <span class='va'>coup_data</span><span class='op'>)</span></span>
 <span><span class='va'>reg</span></span></code></pre>
 </div>
 <pre><code>
@@ -1648,7 +1651,8 @@ Coefficients:
 (Intercept)     military  
    0.443590     0.009879  </code></pre>
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>reg</span> <span class='op'>|&gt;</span></span>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'>#Formatting the regression output</span></span>
+<span><span class='va'>reg</span> <span class='op'>|&gt;</span></span>
 <span>  <span class='fu'>broom</span><span class='fu'>::</span><span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>|&gt;</span></span>
 <span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>term</span>, <span class='va'>estimate</span><span class='op'>)</span> <span class='op'>|&gt;</span>  </span>
 <span>  <span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span>digits <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span></span></code></pre>
@@ -1676,7 +1680,7 @@ Coefficients:
 <p>Because the military variable in this data set is binary and the coup realized variable is also a binary variable, it is difficult to use a regression for these two variables. A more instructive use of the regression would be if one of the variables had a range of values. This is because there is no spectrum of outcomes, so any unit of analysis from the regression would be mainly hypothetical. Also, this regression is not controlling for other kinds of coups, nor the year in which they were conducted. Thus, further analysis is required to get a more accurate picture of the relationship.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'>## Multiple Regression</span></span>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'>## Multiple Regression </span></span>
 <span><span class='va'>multreg</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>realized</span> <span class='op'>~</span> <span class='va'>military</span> <span class='op'>+</span> <span class='va'>year</span> <span class='op'>+</span> <span class='va'>rebel</span> <span class='op'>+</span> <span class='va'>foreign</span> <span class='op'>+</span> <span class='va'>conspiracy</span> <span class='op'>+</span> <span class='va'>palace</span> <span class='op'>+</span> <span class='va'>auto</span> <span class='op'>+</span> <span class='va'>resign</span> <span class='op'>+</span> <span class='va'>dissident</span>, data <span class='op'>=</span> <span class='va'>coup_data</span><span class='op'>)</span></span>
 <span></span>
 <span><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>multreg</span><span class='op'>)</span></span></code></pre>
@@ -1709,7 +1713,8 @@ Residual standard error: 0.4026 on 971 degrees of freedom
 Multiple R-squared:  0.3516,    Adjusted R-squared:  0.3456 
 F-statistic:  58.5 on 9 and 971 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>stargazer</span><span class='op'>)</span></span>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'>#Formatting the multiple regression so that I can see the measurements of the relationships and the p alues for all of the variables</span></span>
+<span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>stargazer</span><span class='op'>)</span></span>
 <span><span class='fu'><a href='https://rdrr.io/pkg/stargazer/man/stargazer.html'>stargazer</a></span><span class='op'>(</span><span class='va'>multreg</span>, type <span class='op'>=</span> <span class='st'>"text"</span><span class='op'>)</span></span></code></pre>
 </div>
 <pre><code>
@@ -1757,13 +1762,8 @@ F Statistic           58.503*** (df = 9; 971)
 ===============================================
 Note:               *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
 </div>
-<p>modelsummary::modelsummary(multreg,
-statistic = c(“s.e. = {std.error}”,
-“p = {p.value}”),
-coef_map =
-gof_map = c(“nobs”, “r.squared”, “adj.r.squared”))</p>
-<p>Interestingly, when controlling for most of the other major kinds of coups possible, we see that that at the alpha = .05 or the 95% confidence interval we fail to reject the null hypothesis that there is no relationship between military involvement and a coup being realized because the p value is 0.073 which is larger than the alpha. Of course, it is such a small number that essentially there is only a slight negative relationship. In sum, it is clear that controlling for the other kinds of coups adds important conformation to the not-statistically significant relationship that I observed in the regression when I examined the confidence intervals for the difference in differences.</p>
-<h2 id="conclusion-section">Conclusion section</h2>
+<p>The other variables besides military are different kinds of coups from the codebook. For example, “dissident” is whether coup attempt originated with regime dissidents. The coefficient for military is -0.057. That indicates a slightly negative relationship.Interestingly, when controlling for most of the other major kinds of coups possible, we see that that at the alpha = .05 or the 95% confidence interval we fail to reject the null hypothesis that there is no relationship between military involvement and a coup being realized because the p value is 0.073 which is larger than the alpha. Of course, it is such a small number that essentially there is only a slight negative relationship. In sum, it is clear that controlling for the other kinds of coups adds important conformation to the not-statistically significant relationship that I observed in the regression when I examined the confidence intervals for the difference in differences.</p>
+<h2 id="conclusion-section">Conclusion Section</h2>
 <p>Indeed, we find that based on the regression and the bootstrap, there is not a statistically meaningful relationship between military involvement in the coup and a higher likelihood of a realized coup occurring. Indeed, based off of the bootstrap and the regression table, we can see that we are not able to reject the null hypothesis at the 95% level and thus we cannot say for sure whether there is a relationship, and anyhow the ATE calculated is extremely small. Thus, based on the analysis from the ATE, bootstrap and the regression, there is a weak relationship between military involvement and realized coup attempts. In simpler terms, there is weak to no support for my hypothesis.</p>
 <p>Of course, the analysis is confirmed when looking at the multiple regression. There, the p-value of 0.07 is larger than the alpha of 0.05, meaning that we fail reject the null hypothesis, meaning that the relationship is not statistically significant. Thus, controlling for the variables confirms the earlier bootstrapping.</p>
 <p>In terms of limits to analysis, I think that the dataset has a very strict definition of what can be considered a coup, and also what constitutes military involvement. So, I do think that there is definitely some missing data from coups that may not have had the whole military involved, but several high ranking generals working with civilian counterparts in a conspiracy etc. I think that there is potentially a greater relationship if the parameters are loosened to a greater degree. In terms of a threat to inference in the experiment, I think there may be a kind of sampling bias inside the dataset where in a lot of these cases we may for national security reasons in many of these countries not know exactly who brought down the previous regime. What this means is that I suspect in many cases the conspirators or politicians hoping to stage a coup have a verbal agreement with the military that they won’t do anything. In those cases, I feel as though the military is implicated in the coup attempt. There are also likely many confounding variables, one of which are explored in an additional analysis paragraph.</p>
