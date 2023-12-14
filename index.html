@@ -1519,7 +1519,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <div class="d-article">
 <h2 id="introduction">Introduction</h2>
 <p>My research question is how does a coup attempt that has been initiated by military actors affect the chances of the realization of the coup? My hypothesis is that coups that originate with military forces will have higher success rates than coups initiated by other means such as by rebel forces or by popular revolt. This hypothesis is based on a conception of civil-military relations that dictates the confinement of the military focus to the use of force, while politicians make all decisions for the state. Should a military be discontent with the actions of the head of state, their previous restraint on entrance into the political sphere could create a decisive shock event that would result in a regime change. Additionally, the military generally holds a monopoly or near monopoly on the deployment of violent means to achieve the objective. The use of violence to affect a successful change of ruler is another reason that a military led coup may see higher success rates than coups that originate with sectors of society that do not posses the ability to mobilize manpower and violence to achieve regime change.</p>
-<p>My unit of analysis are coups. Specifically, the Cline Center Coup D’Etat data set has 981 coups that occurred between 1945 and 2022. The explanatory variable is coup success. When the “realized” variable is equal to 1, that means the coup has occurred, in that a regime change happened. When the “realized” variable is equal to 0, that indicates that no regime change occurred, even though a coup was initiated. My outcome variable is whether or not the military initiated the coup. With this variable, the Cline Center experts are just looking at conventional militaries, and not security services, spy services, or other kinds of paramilitary formations. When the variable “military” = 1, then the military started the coup. When that variable is set to 0, it originated elsewhere.</p>
+<p>My unit of analysis are coups. Specifically, the Cline Center Coup D’Etat data set has 981 coups that occurred between 1945 and 2022. The outcome variable is coup success. When the “realized” variable is equal to 1, that means the coup has occurred, in that a regime change happened. When the “realized” variable is equal to 0, that indicates that no regime change occurred, even though a coup was initiated. My explanatory variable is whether or not the military initiated the coup. With this variable, the Cline Center experts are just looking at conventional militaries, and not security services, spy services, or other kinds of paramilitary formations. When the variable “military” = 1, then the military started the coup. When that variable is set to 0, it originated elsewhere.</p>
 <p>If the average number of successful coups when the military was involved is significantly higher than the average number of successful coups under other conditions such as rebel groups or popular revolt, than I can conclude that there is a positive correlation between military involvement and the probability of a coup’s success.</p>
 <h2 id="data-section">Data Section</h2>
 <div class="layout-chunk" data-layout="l-body">
@@ -1596,18 +1596,18 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </div>
 <pre><code># A tibble: 1,000 × 4
 # Groups:   replicate [1,000]
-   replicate   `0`   `1`     ATE
-       &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
- 1         1 0.501 0.489 -0.0126
- 2         2 0.473 0.453 -0.0206
- 3         3 0.416 0.445  0.0284
- 4         4 0.380 0.427  0.0477
- 5         5 0.435 0.457  0.0219
- 6         6 0.422 0.440  0.0181
- 7         7 0.439 0.466  0.0271
- 8         8 0.456 0.439 -0.0171
- 9         9 0.433 0.463  0.0305
-10        10 0.475 0.443 -0.0324
+   replicate   `0`   `1`      ATE
+       &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
+ 1         1 0.460 0.466  0.00670
+ 2         2 0.432 0.440  0.00804
+ 3         3 0.415 0.452  0.0370 
+ 4         4 0.438 0.476  0.0385 
+ 5         5 0.410 0.502  0.0916 
+ 6         6 0.392 0.458  0.0655 
+ 7         7 0.458 0.444 -0.0140 
+ 8         8 0.485 0.468 -0.0167 
+ 9         9 0.393 0.440  0.0464 
+10        10 0.419 0.449  0.0303 
 # ℹ 990 more rows</code></pre>
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'>#Creating the confidence intervals</span></span>
@@ -1627,8 +1627,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: right;">-0.0513</td>
-<td style="text-align: right;">0.079</td>
+<td style="text-align: right;">-0.0533</td>
+<td style="text-align: right;">0.0723</td>
 </tr>
 </tbody>
 </table>
@@ -1762,13 +1762,14 @@ F Statistic           58.503*** (df = 9; 971)
 ===============================================
 Note:               *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
 </div>
-<p>The other variables besides military are different kinds of coups from the codebook. For example, “dissident” is whether coup attempt originated with regime dissidents. The coefficient for military is -0.057. That indicates a slightly negative relationship.Interestingly, when controlling for most of the other major kinds of coups possible, we see that that at the alpha = .05 or the 95% confidence interval we fail to reject the null hypothesis that there is no relationship between military involvement and a coup being realized because the p value is 0.073 which is larger than the alpha. Of course, it is such a small number that essentially there is only a slight negative relationship. In sum, it is clear that controlling for the other kinds of coups adds important conformation to the not-statistically significant relationship that I observed in the regression when I examined the confidence intervals for the difference in differences.</p>
+<p>The other variables besides military are different kinds of coups from the codebook. For example, “dissident” is whether coup attempt originated with regime dissidents. The coefficient for military is -0.057. That indicates a slightly negative relationship. Interestingly, when controlling for most of the other major kinds of coups possible, we see that that at the alpha = .05 or the 95% confidence interval we fail to reject the null hypothesis that there is no relationship between military involvement and a coup being realized because the p value is 0.073 which is larger than the alpha. Of course, it is such a small number that essentially there is only a slight negative relationship. In sum, it is clear that controlling for the other kinds of coups adds important conformation to the not-statistically significant relationship that I observed in the regression when I examined the confidence intervals for the difference in differences.</p>
+<p>Thus, since the coefficient for military is -0.057, that means there is a very slight negative relationship, but since the p value is larger than the alpha at the 95% confidence we fail to reject the null hypothesis, so my result is not statistically significant. That means that the coefficient likely does not represent a causal effect.</p>
 <h2 id="conclusion-section">Conclusion Section</h2>
 <p>Indeed, we find that based on the regression and the bootstrap, there is not a statistically meaningful relationship between military involvement in the coup and a higher likelihood of a realized coup occurring. Indeed, based off of the bootstrap and the regression table, we can see that we are not able to reject the null hypothesis at the 95% level and thus we cannot say for sure whether there is a relationship, and anyhow the ATE calculated is extremely small. Thus, based on the analysis from the ATE, bootstrap and the regression, there is a weak relationship between military involvement and realized coup attempts. In simpler terms, there is weak to no support for my hypothesis.</p>
 <p>Of course, the analysis is confirmed when looking at the multiple regression. There, the p-value of 0.07 is larger than the alpha of 0.05, meaning that we fail reject the null hypothesis, meaning that the relationship is not statistically significant. Thus, controlling for the variables confirms the earlier bootstrapping.</p>
 <p>In terms of limits to analysis, I think that the dataset has a very strict definition of what can be considered a coup, and also what constitutes military involvement. So, I do think that there is definitely some missing data from coups that may not have had the whole military involved, but several high ranking generals working with civilian counterparts in a conspiracy etc. I think that there is potentially a greater relationship if the parameters are loosened to a greater degree. In terms of a threat to inference in the experiment, I think there may be a kind of sampling bias inside the dataset where in a lot of these cases we may for national security reasons in many of these countries not know exactly who brought down the previous regime. What this means is that I suspect in many cases the conspirators or politicians hoping to stage a coup have a verbal agreement with the military that they won’t do anything. In those cases, I feel as though the military is implicated in the coup attempt. There are also likely many confounding variables, one of which are explored in an additional analysis paragraph.</p>
 <h2 id="additional-analysis">Additional Analysis</h2>
-<p>I will also note that there are several potential confounders that could influence both whether the military is involved in the coup attempt and whether the coup is successful or not. Indeed, one potential confounder is the length of time that the incumbent regime has been in power. If they have been in power for a long time, there is probably a lower chance that a coup against them would be realized, because they have been able to consolidate control, and that time in power variable would have given the regime sufficient time to put their elites in place in the military hierarchy. Thus, that is one possible confounder. In terms of an alternative explanation for the results that I have gained, I think that much of the military involvement in coups might be the verbal contracts to not interfere with coup plotters’ plans. Thus, I think if the dataset included those kinds of more nebulous and hard-to-measure varities of involvement, perhaps you would find a stronger correlation between military involvement and realized coups. Thus, because the military variable does not include security forces, ex-military, or informal agreements between other factors and military leaders, I think that the parameters could prevent the emergence of a positive relationship between the two variables.</p>
+<p>I will also note that there are several potential confounders that could influence both whether the military is involved in the coup attempt and whether the coup is successful or not. Indeed, one potential confounder is the length of time that the incumbent regime has been in power. If they have been in power for a long time, there is probably a lower chance that a coup against them would be realized, because they have been able to consolidate control, and that time in power variable would have given the regime sufficient time to put their elites in place in the military hierarchy. Thus, that is one possible confounder. In terms of an alternative explanation for the results that I have gained, I think that much of the military involvement in coups might be the verbal contracts to not interfere with coup plotters’ plans. Thus, I think if the dataset included those kinds of more nebulous and hard-to-measure varieties of involvement, perhaps you would find a stronger correlation between military involvement and realized coups. Thus, because the military variable does not include security forces, ex-military, or informal agreements between other factors and military leaders, I think that the parameters could prevent the emergence of a positive relationship between the two variables. So, I think that the relationship could be investigated further by working to get more accurate data within the dataset by including more kinds of examples of military involvement, as well as making military not a binary variable but a spectrum.</p>
 <h2 id="attribution">Attribution</h2>
 <p>Peyton, Buddy, Joseph Bajjalieh, Dan Shalmon, Michael Martin, Jonathan Bonaguro, and Emilio Soto. 2023. Cline Center Coup d’État Project Dataset. Cline Center for Advanced Social Research. V.2.1.2. February 23. University of Illinois Urbana-Champaign. doi: 10.13012/B2IDB-9651987_V6</p>
 <hr />
